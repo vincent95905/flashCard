@@ -55,7 +55,7 @@ class InterfaceConsole():
             if(self.getApplication().getIndexPaquetCourantDansListePaquet() == i):
                 print("[{}] : {}  => Paquet courant".format(i, paquet.getNom()))
             else:
-                print("[{}] : {}".format(i,paquet.getNom()))
+                print("[{}] : {}".format(i, paquet.getNom()))
             i += 1
 
     def creerCarte(self):
@@ -82,6 +82,7 @@ class InterfaceConsole():
                 self.getApplication().getListePaquet()[index].getNom()))
         else:
             print("C'est deja le paquet courant")
+
 
 class InterfaceGraphique(tk.Frame):
 

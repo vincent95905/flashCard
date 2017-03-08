@@ -1,7 +1,7 @@
 TO DO list :
 
 
-- Pouvoir revenir sur le paquet courant sur lequel on etait quand on avait quitte (il revient actuellement sur le premier paquet tout le temps)
+- Pouvoir revenir sur le paquet courant sur lequel on etait quand on avait quitte (il revient actuellement sur le premier paquet tout le temps) => Fait
 - Ajout de l'entrainement en version console
-- Ajout de la fonctionnalite de difficulte de la carte
+- Ajout de la fonctionnalite de difficulte de la carte (va avec le mode entrainement)
 - Faire l'interface graphique

@@ -30,14 +30,31 @@ class Carte:
 
 class Paquet:
 
+    isPaquetCourantAlreadySet = False
+
     def __init__(self, nom, chemin):
         self.listeCarte = []
         self.nom = nom
         self.chemin = chemin
         self.nombreCarte = 0
+        self.isPaquetCourant = self.managePaquetCourant()
 
     def __getitem__(self, index):
         return self.getListeCarte()[index]
+
+    # Gere le fait qu'il ne peut exister qu'un seul paquet courant
+    def managePaquetCourant(self):
+        if(Paquet.isPaquetCourantAlreadySet):
+            return False
+        else:
+            Paquet.isPaquetCourantAlreadySet = True
+            return True
+
+    def getIsPaquetCourant(self):
+        return self.isPaquetCourant
+
+    def setIsPaquetCourant(self, boolean):
+        self.isPaquetCourant = boolean
 
     def getListeCarte(self):
         return self.listeCarte
@@ -74,6 +91,7 @@ class Paquet:
         s += " | nombre carte dans le paquet : "
         s += str(self.getNombreCarte())
         s += " | "
+        s += str(self.getIsPaquetCourant())
         s += "\n"
         for carte in self.getListeCarte():
             s += carte.__str__()

@@ -77,7 +77,8 @@ class InterfaceConsole():
         print("saisissez le nombre du paquet sur lequel vous souhaitez travailler")
         index = int(input("nombre : "))
         if(index != self.getApplication().getIndexPaquetCourantDansListePaquet()):
-            self.getApplication().setIndexPaquetCourantDansListePaquet(index)
+            self.getApplication().changementPaquetCourant(index)
+            # self.getApplication().setIndexPaquetCourantDansListePaquet(index)
             print("le paquet courant est desormais : {}".format(
                 self.getApplication().getListePaquet()[index].getNom()))
         else:

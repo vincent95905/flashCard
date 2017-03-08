@@ -18,7 +18,7 @@ class Application:
         self.listePaquet = self.chargerListePaquetSauvegarde()
         self.nombrePaquet = 0
         # Retourne l'index du paquet sur lequel on travail
-        self.indexPaquetCourantDansListePaquet = 0
+        self.indexPaquetCourantDansListePaquet = self.initPaquetCourant()
         self.interface = InterfaceConsole(self)
         #self.interface = InterfaceGrahique(self)
 
@@ -49,6 +49,9 @@ class Application:
         else:
             self.indexPaquetCourantDansListePaquet = index
 
+    def getPaquetCourant(self):
+        return self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()]
+
     def chargerListePaquetSauvegarde(self):
         liste = []
         chemin = "paquets/"
@@ -73,7 +76,35 @@ class Application:
         self.setNombrePaquet(len(liste))
         return liste
 
-    # Creer un paquet et l'ajoute a la liste de paquet en fournissant juste le nom du paquet
+    # Initialise l'index du paquet courant
+    # On parcourt la liste de paquet et si il il a la variable getIsPaquetCourant a true, on renvoie l'index qu'il a
+    def initPaquetCourant(self):
+        # Si pas de paquet dans la liste
+        if(len(self.getListePaquet()) == 0):
+            return 0
+        else:
+            i = 0
+            for paquet in self.getListePaquet():
+                if(paquet.getIsPaquetCourant()):
+                    return i
+                i += 1
+
+    # On change le paquet courant avec l'index d'un autre paquet et on sauvegarde les deux paquets modifies
+    def changementPaquetCourant(self, indexNouveauPaquetCourant):
+        self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()].setIsPaquetCourant(False)
+        self.sauvegarderPaquet(self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()])
+
+        # print("ancien paquet courant {}".format(self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()].getNom()))
+
+        self.setIndexPaquetCourantDansListePaquet(indexNouveauPaquetCourant)
+        self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()].setIsPaquetCourant(True)
+        
+        # print("nouveau paquet courant {}".format(self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()].getNom()))
+
+        self.sauvegarderPaquet(self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()])
+
+    # Creer un paquet et l'ajoute a la liste de paquet en fournissant juste le
+    # nom du paquet
     def creerPaquet(self, nomPaquet):
         paquet = Paquet(nomPaquet, "paquets/")
         self.ajouterPaquetListePaquet(paquet)

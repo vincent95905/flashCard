@@ -4,6 +4,7 @@ class Carte:
     def __init__(self, identifiant, valeur):
         self.identifiant = identifiant
         self.valeur = valeur
+        self.difficulte = 0 # 0 : facile, 1 : moyen, 2 : difficile, 3 : a revoir
 
     def getIdentifiant(self):
         return self.identifiant
@@ -17,10 +18,31 @@ class Carte:
     def setValeur(self, valeur):
         self.valeur = valeur
 
+    def getDifficulte(self):
+        return self.difficulte
+
+    def setDifficulte(self, difficulte):
+        if(difficulte >= 0 and difficulte <= 4):
+            self.difficulte = difficulte
+        else:
+            print("la difficulte doit etre comprise entre 0 et 4 inclu")
+
+    def affichageDifficulte(self):
+        if(self.getDifficulte() == 0):
+            return "facile"
+        elif(self.getDifficulte() == 1):
+            return "moyen"
+        elif(self.getDifficulte() == 2):
+            return "difficile"
+        elif(self.getDifficulte() == 3):
+            "a revoir"
+
     def __str__(self):
         s = self.identifiant
         s += " | "
         s += self.valeur
+        s += " | "
+        s += self.affichageDifficulte()
         return s
 
     def modifierCarte(self, identifiant, valeur):

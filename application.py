@@ -4,6 +4,7 @@ import os
 import random
 from objets import *
 from interface import *
+from entrainement import *
 
 #############################
 # Class Application
@@ -49,6 +50,9 @@ class Application:
         else:
             self.indexPaquetCourantDansListePaquet = index
 
+    #def getPaquetCourant(self):
+    #    return self.getPaquetCourant()
+
     def getPaquetCourant(self):
         return self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()]
 
@@ -91,17 +95,17 @@ class Application:
 
     # On change le paquet courant avec l'index d'un autre paquet et on sauvegarde les deux paquets modifies
     def changementPaquetCourant(self, indexNouveauPaquetCourant):
-        self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()].setIsPaquetCourant(False)
-        self.sauvegarderPaquet(self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()])
+        self.getPaquetCourant().setIsPaquetCourant(False)
+        self.sauvegarderPaquet(self.getPaquetCourant())
 
-        # print("ancien paquet courant {}".format(self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()].getNom()))
+        # print("ancien paquet courant {}".format(self.getPaquetCourant().getNom()))
 
         self.setIndexPaquetCourantDansListePaquet(indexNouveauPaquetCourant)
-        self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()].setIsPaquetCourant(True)
+        self.getPaquetCourant().setIsPaquetCourant(True)
         
-        # print("nouveau paquet courant {}".format(self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()].getNom()))
+        # print("nouveau paquet courant {}".format(self.getPaquetCourant().getNom()))
 
-        self.sauvegarderPaquet(self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()])
+        self.sauvegarderPaquet(self.getPaquetCourant())
 
     # Creer un paquet et l'ajoute a la liste de paquet en fournissant juste le
     # nom du paquet
@@ -119,8 +123,7 @@ class Application:
         c = Carte(identifiant, valeur)
         self.getListePaquet()[
             self.getIndexPaquetCourantDansListePaquet()].ajoutCarte(c)
-        self.sauvegarderPaquet(self.getListePaquet()[
-                               self.getIndexPaquetCourantDansListePaquet()])
+        self.sauvegarderPaquet(self.getPaquetCourant())
 
     def sauvegarderPaquet(self, paquet):
         chemin = paquet.getChemin() + paquet.getNom()
@@ -132,44 +135,26 @@ class Application:
 
     def chargementPaquet(self, nomPaquetACharger):
         with open(nomPaquetACharger, 'rb') as handle:
-            self.getListePaquet()[
-                self.getIndexPaquetCourantDansListePaquet()] = pickle.load(handle)
-
-    def getPaquetCourant(self):
-        print("-----")
-        print(self.getListePaquet()[
-              self.getIndexPaquetCourantDansListePaquet()])
-        print("-----")
+            self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()] = pickle.load(handle)
+        
 
     def viderPaquetCourant(self):
-        i = self.getListePaquet()[
-            self.getIndexPaquetCourantDansListePaquet()].getNombreCarte() - 1
+        i = self.getPaquetCourant().getNombreCarte() - 1
         #print("i : {}".format(i))
         # print("-----")
         while(i >= 0):
-            # print(len(self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()].getListeCarte()))
-            del self.getListePaquet()[
-                self.getIndexPaquetCourantDansListePaquet()].getListeCarte()[i]
+            # print(len(self.getPaquetCourant().getListeCarte()))
+            del self.getPaquetCourant().getListeCarte()[i]
             i -= 1
 
         self.setNombrePaquet(0)
-        self.getListePaquet()[
-            self.getIndexPaquetCourantDansListePaquet()].setNombreCarte(0)
-        self.sauvegarderPaquet(self.getListePaquet()[
-                               self.getIndexPaquetCourantDansListePaquet()])
+        self.getPaquetCourant().setNombreCarte(0)
+        self.sauvegarderPaquet(self.getPaquetCourant())
 
-    def training(self):
-
-        nombreAleatoire = random.randrange(self.getListePaquet(
-        )[self.getIndexPaquetCourantDansListePaquet()].getNombreCarte())
-        #print("nombre aleatoire : {}".format(nombreAleatoire))
-        identifiant = self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet(
-        )].__getitem__(nombreAleatoire).getIdentifiant()
-        valeur = self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet(
-        )].__getitem__(nombreAleatoire).getValeur()
-
-        return identifiant, valeur
-
+    # C'est la qu'on va appeler la classe entrainement et on fou le bordel relatif a l'entrainement la bas
+    def startEntrainement(self):
+        entrainement = Entrainement(self.getPaquetCourant())
+        entrainement.commencerEntrainement()
 
 def main():
     Application()

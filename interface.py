@@ -24,7 +24,8 @@ class InterfaceConsole():
             print("3 : afficher le paquet courant")
             print("4 : afficher liste des paquets")
             print("5 : changer le paquet courant")
-            print("6 : quitter")
+            print("6 : commencer l'entrainement")
+            print("7 : quitter")
 
             try:
                 choix = int(input("Votre choix : "))
@@ -40,6 +41,8 @@ class InterfaceConsole():
                 elif(choix == 5):
                     self.changePaquetCourant()
                 elif(choix == 6):
+                    self.startEntrainement()
+                elif(choix == 7):
                     continuer = 0
             except ValueError:
                 print("Donne moi un nombre saloppe !")
@@ -83,6 +86,9 @@ class InterfaceConsole():
                 self.getApplication().getListePaquet()[index].getNom()))
         else:
             print("C'est deja le paquet courant")
+
+    def startEntrainement(self):
+        self.getApplication().startEntrainement()
 
 
 class InterfaceGraphique(tk.Frame):

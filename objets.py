@@ -1,4 +1,5 @@
 from constantes import *
+import pickle
 
 class Carte:
 
@@ -142,4 +143,9 @@ class Paquet:
 
         self.setNombreCarte()
 
+    def sauvegarde(self):
+        chemin = self.getChemin() + self.getNom()
+        with open(chemin, 'wb') as output:
+            pickle._dump(self, output, pickle.HIGHEST_PROTOCOL)
 
+        print("sauvegarde de {} a {}".format(self.getNom(), chemin))

@@ -153,7 +153,9 @@ class Entrainement():
 		# print("paquet entrainement")
 		# # self.afficheListe(self.getPaquetEntrainement())
 		# print(self.getPaquetEntrainement())
-		self.getApplication().sauvegarderPaquet(self.getPaquetEntrainement())
+		
+		# self.getApplication().sauvegarderPaquet(self.getPaquetEntrainement())
+		self.getPaquetEntrainement().sauvegarde()
 
 	def gestionEntrainement(self):
 		# sys.stdout.flush()

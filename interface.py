@@ -54,7 +54,7 @@ class InterfaceConsole():
 
     def afficherListePaquet(self):
         i = 0
-
+        print("Il y a {} paquets".format(self.getApplication().getNombrePaquet()))
         for paquet in self.getApplication().getListePaquet():
             if(self.getApplication().getIndexPaquetCourantDansListePaquet() == i):
                 print("[{}] : {}  => Paquet courant".format(i, paquet.getNom()))
@@ -82,7 +82,6 @@ class InterfaceConsole():
         index = int(input("nombre : "))
         if(index != self.getApplication().getIndexPaquetCourantDansListePaquet()):
             self.getApplication().changementPaquetCourant(index)
-            # self.getApplication().setIndexPaquetCourantDansListePaquet(index)
             print("le paquet courant est desormais : {}".format(
                 self.getApplication().getListePaquet()[index].getNom()))
         else:

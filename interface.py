@@ -1,5 +1,5 @@
 import tkinter as tk
-
+import sys
 
 class InterfaceConsole():
 
@@ -28,6 +28,7 @@ class InterfaceConsole():
             print("7 : quitter")
 
             try:
+                # sys.stdout.flush()
                 choix = int(input("Votre choix : "))
 
                 if(choix == 1):
@@ -41,7 +42,7 @@ class InterfaceConsole():
                 elif(choix == 5):
                     self.changePaquetCourant()
                 elif(choix == 6):
-                    self.startEntrainement()
+                    self.getApplication().startEntrainement()
                 elif(choix == 7):
                     continuer = 0
             except ValueError:
@@ -87,104 +88,101 @@ class InterfaceConsole():
         else:
             print("C'est deja le paquet courant")
 
-    def startEntrainement(self):
-        self.getApplication().startEntrainement()
 
+# class InterfaceGraphique(tk.Frame):
 
-class InterfaceGraphique(tk.Frame):
+#     def __init__(self, application):
+#         self.interface = tk.Tk()
+#         self.interface.mainloop()
+#         self.interface.destroy()
 
-    def __init__(self, application):
-        self.interface = tk.Tk()
-        self.interface.mainloop()
-        self.interface.destroy()
+#         self.interface.minsize(width=400, height=400)
+#         self.fenetre = tk.Frame.__init__(self, self.interface, width=400, height=400)
 
-        self.interface.minsize(width=400, height=400)
-        self.fenetre = tk.Frame.__init__(self, self.interface, width=400, height=400)
+#         self.application = application
+#         self.identifiant = ""
+#         self.valeur = ""
+#         self.identifiantEntrainement = ""
+#         self.valeurEntrainement = ""
 
-        self.application = application
-        self.identifiant = ""
-        self.valeur = ""
-        self.identifiantEntrainement = ""
-        self.valeurEntrainement = ""
+#         self.setButton()
+#         self.setEntry()
 
-        self.setButton()
-        self.setEntry()
+#     def getIdentifiantEntrainement(self):
+#         return self.identifiantEntrainement
 
-    def getIdentifiantEntrainement(self):
-        return self.identifiantEntrainement
+#     def setIdentifiantEntrainement(self, valeur):
+#         self.identifiantEntrainement = valeur
 
-    def setIdentifiantEntrainement(self, valeur):
-        self.identifiantEntrainement = valeur
+#     def getValeurEntrainement(self):
+#         return self.valeurEntrainement
 
-    def getValeurEntrainement(self):
-        return self.valeurEntrainement
+#     def setValeurEntrainement(self, valeur):
+#         self.valeurEntrainement = valeur
 
-    def setValeurEntrainement(self, valeur):
-        self.valeurEntrainement = valeur
+#     def setEntry(self):
+#         self.idEntry = tk.Entry()
+#         self.idEntry.pack()
 
-    def setEntry(self):
-        self.idEntry = tk.Entry()
-        self.idEntry.pack()
+#         self.valeurEntry = tk.Entry()
+#         self.valeurEntry.pack()
 
-        self.valeurEntry = tk.Entry()
-        self.valeurEntry.pack()
+#     def setButton(self):
+#         # self.boutonQuitter = tk.Button(self, text="Quitter", command=self.quit)
+#         # self.boutonQuitter.pack()
 
-    def setButton(self):
-        # self.boutonQuitter = tk.Button(self, text="Quitter", command=self.quit)
-        # self.boutonQuitter.pack()
+#         self.boutonAddCarte = tk.Button(
+#             self, text="Ajout Carte", command=self.getCarte)
+#         self.boutonAddCarte.pack()
 
-        self.boutonAddCarte = tk.Button(
-            self, text="Ajout Carte", command=self.getCarte)
-        self.boutonAddCarte.pack()
+#         self.boutonViderPaquet = tk.Button(
+#             self, text="Vider Paquet", command=self.viderPaquet)
+#         self.boutonViderPaquet.pack()
 
-        self.boutonViderPaquet = tk.Button(
-            self, text="Vider Paquet", command=self.viderPaquet)
-        self.boutonViderPaquet.pack()
+#         self.afficherPaquetCourant = tk.Button(
+#             self, text="Paquet Courant", command=self.affichePaquetCourant)
+#         self.afficherPaquetCourant.pack()
 
-        self.afficherPaquetCourant = tk.Button(
-            self, text="Paquet Courant", command=self.affichePaquetCourant)
-        self.afficherPaquetCourant.pack()
+#         self.entrainemenent = tk.Button(
+#             self, text="entrainemenent", command=self.startTraining)
+#         self.entrainemenent.pack()
 
-        self.entrainemenent = tk.Button(
-            self, text="entrainemenent", command=self.startTraining)
-        self.entrainemenent.pack()
+#         self.valider = tk.Button(self, text="valider", command=self.valider)
+#         self.valider.pack()
 
-        self.valider = tk.Button(self, text="valider", command=self.valider)
-        self.valider.pack()
+#     def getCarte(self):
+#         if(self.idEntry.get() != "" and self.valeurEntry.get() != ""):
+#             self.identifiant = self.idEntry.get()
+#             self.valeur = self.valeurEntry.get()
+#             self.application.ajouterCartePaquetCourant(self.identifiant, self.valeur)
 
-    def getCarte(self):
-        if(self.idEntry.get() != "" and self.valeurEntry.get() != ""):
-            self.identifiant = self.idEntry.get()
-            self.valeur = self.valeurEntry.get()
-            self.application.ajouterCartePaquetCourant(self.identifiant, self.valeur)
+#         self.idEntry.delete(0, tk.END)
+#         self.valeurEntry.delete(0, tk.END)
 
-        self.idEntry.delete(0, tk.END)
-        self.valeurEntry.delete(0, tk.END)
+#     def viderPaquet(self):
+#         self.application.viderPaquetCourant()
+#         print("paquet courant vide")
 
-    def viderPaquet(self):
-        self.application.viderPaquetCourant()
-        print("paquet courant vide")
+#     def affichePaquetCourant(self):
+#         self.application.getPaquetCourant()
 
-    def affichePaquetCourant(self):
-        self.application.getPaquetCourant()
+#     def startTraining(self):
+#         identifiant, valeur = self.application.training()
+#         # print("id : {}, valeur {}".format(identifiant, valeur))
+#         self.setIdentifiantEntrainement(identifiant)
+#         self.setValeurEntrainement(valeur)
+#         self.idEntry.delete(0, tk.END)
+#         self.idEntry.insert(0, self.getIdentifiantEntrainement())
 
-    def startTraining(self):
-        identifiant, valeur = self.application.training()
-        # print("id : {}, valeur {}".format(identifiant, valeur))
-        self.setIdentifiantEntrainement(identifiant)
-        self.setValeurEntrainement(valeur)
-        self.idEntry.delete(0, tk.END)
-        self.idEntry.insert(0, self.getIdentifiantEntrainement())
-
-    def valider(self):
-        result = self.getValeurEntrainement() == self.valeurEntry.get()
-        # Si le resultat est bon
-        if(result):
-            self.valeurEntry.delete(0, tk.END)
-            self.idEntry.delete(0, tk.END)
-            self.idEntry.insert(0, "Good")
-            self.valeurEntry.delete(0, tk.END)
-        else:
-            self.valeurEntry.delete(0, tk.END)
-            self.valeurEntry.insert(0, "Nop")
-            self.valeurEntry.delete(0, tk.END)
+#     def valider(self):
+#         result = self.getValeurEntrainement() == self.valeurEntry.get()
+#         # Si le resultat est bon
+#         if(result):
+#             self.valeurEntry.delete(0, tk.END)
+#             self.idEntry.delete(0, tk.END)
+#             self.idEntry.insert(0, "Good")
+#             self.valeurEntry.delete(0, tk.END)
+#         else:
+#             self.valeurEntry.delete(0, tk.END)
+#             self.valeurEntry.insert(0, "Nop")
+#             self.valeurEntry.delete(0, tk.END)

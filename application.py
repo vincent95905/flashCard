@@ -5,6 +5,7 @@ import random
 from objets import *
 from interface import *
 from entrainement import *
+from constantes import *
 
 #############################
 # Class Application
@@ -49,9 +50,6 @@ class Application:
             print("index non valide")
         else:
             self.indexPaquetCourantDansListePaquet = index
-
-    #def getPaquetCourant(self):
-    #    return self.getPaquetCourant()
 
     def getPaquetCourant(self):
         return self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()]
@@ -121,8 +119,7 @@ class Application:
     # Recuperer Carte depuis interface et l'ajoute au paquetCourant
     def ajouterCartePaquetCourant(self, identifiant, valeur):
         c = Carte(identifiant, valeur)
-        self.getListePaquet()[
-            self.getIndexPaquetCourantDansListePaquet()].ajoutCarte(c)
+        self.getPaquetCourant().ajoutCarte(c)
         self.sauvegarderPaquet(self.getPaquetCourant())
 
     def sauvegarderPaquet(self, paquet):
@@ -134,27 +131,32 @@ class Application:
         print("sauvegarde a {}".format(chemin))
 
     def chargementPaquet(self, nomPaquetACharger):
-        with open(nomPaquetACharger, 'rb') as handle:
+        chemin = "paquets/" + nomPaquetACharger
+        with open(chemin, 'rb') as handle:
             self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()] = pickle.load(handle)
         
 
     def viderPaquetCourant(self):
-        i = self.getPaquetCourant().getNombreCarte() - 1
-        #print("i : {}".format(i))
+        # i = self.getPaquetCourant().getNombreCarte() - 1
+        # print("i : {}".format(i))
         # print("-----")
-        while(i >= 0):
-            # print(len(self.getPaquetCourant().getListeCarte()))
-            del self.getPaquetCourant().getListeCarte()[i]
-            i -= 1
+        # while(i >= 0):
+        #     # print(len(self.getPaquetCourant().getListeCarte()))
+        #     del self.getPaquetCourant().getListeCarte()[i]
+        #     i -= 1
 
-        self.setNombrePaquet(0)
+        self.getPaquetCourant().viderPaquet()
+        self.setNombrePaquet(len(self.getListePaquet()))
         self.getPaquetCourant().setNombreCarte(0)
         self.sauvegarderPaquet(self.getPaquetCourant())
 
     # C'est la qu'on va appeler la classe entrainement et on fou le bordel relatif a l'entrainement la bas
     def startEntrainement(self):
-        entrainement = Entrainement(self.getPaquetCourant())
-        entrainement.commencerEntrainement()
+        entrainement = Entrainement(self.getPaquetCourant(), self)
+        entrainement.gestionEntrainement()
+        self.chargementPaquet(self.getPaquetCourant().getNom())
+        print("fin entrainement")
+        # self.sauvegarderPaquet(self.getPaquetCourant())
 
 def main():
     Application()

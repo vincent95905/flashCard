@@ -1,0 +1,7 @@
+
+# Constantes
+
+NON_DEFINI = -1
+FACILE = 0
+MOYEN = 1
+DIFFICILE = 2

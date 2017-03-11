@@ -1,10 +1,11 @@
+from constantes import *
 
 class Carte:
 
     def __init__(self, identifiant, valeur):
         self.identifiant = identifiant
         self.valeur = valeur
-        self.difficulte = 0 # 0 : facile, 1 : moyen, 2 : difficile, 3 : a revoir
+        self.difficulte = NON_DEFINI
 
     def getIdentifiant(self):
         return self.identifiant
@@ -28,14 +29,14 @@ class Carte:
             print("la difficulte doit etre comprise entre 0 et 4 inclu")
 
     def affichageDifficulte(self):
-        if(self.getDifficulte() == 0):
+        if(self.getDifficulte() == FACILE):
             return "facile"
-        elif(self.getDifficulte() == 1):
+        elif(self.getDifficulte() == MOYEN):
             return "moyen"
-        elif(self.getDifficulte() == 2):
+        elif(self.getDifficulte() == DIFFICILE):
             return "difficile"
-        elif(self.getDifficulte() == 3):
-            "a revoir"
+        elif(self.getDifficulte() == NON_DEFINI):
+            return "non defini"
 
     def __str__(self):
         s = self.identifiant
@@ -99,12 +100,12 @@ class Paquet:
     def getNombreCarte(self):
         return self.nombreCarte
 
-    def setNombreCarte(self, nombreCarte):
-        self.nombreCarte = nombreCarte
+    def setNombreCarte(self):
+        self.nombreCarte = len(self.getListeCarte())
 
     def ajoutCarte(self, carte):
         self.listeCarte.append(carte)
-        self.setNombreCarte(self.getNombreCarte() + 1)
+        self.setNombreCarte()
 
     def __str__(self):
         s = "nom paquet : " + self.getNom()
@@ -128,7 +129,17 @@ class Paquet:
         print(s)
 
     def supprimerCarte(self, carte):
-        self.getListeCarte().remove(carte)
-
         if(self.getNombreCarte() > 0):
-            self.setNombreCarte(self.getNombreCarte() - 1)
+            self.getListeCarte().remove(carte)
+            self.setNombreCarte()
+    
+    def viderPaquet(self):
+        i = len(self.getListeCarte()) - 1
+
+        while(i >= 0):
+            del self.getListeCarte()[i]
+            i -= 1
+
+        self.setNombreCarte()
+
+

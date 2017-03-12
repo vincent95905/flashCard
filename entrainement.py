@@ -1,6 +1,7 @@
 from constantes import *
 from random import randrange
 import sys
+import time
 
 class Entrainement():
 
@@ -163,7 +164,15 @@ class Entrainement():
 
 		while(continuer):
 			carte = self.tireAuSortCarte()
-			print("***  {}  ***".format(carte.getIdentifiant()))
+			print("---------------------------")
+			print("|         {}          |".format(carte.getIdentifiant()))
+			print("---------------------------")
+
+			time.sleep(1)
+
+			print("---------------------------")
+			print("|         {}          |".format(carte.getValeur()))
+			print("---------------------------")
 
 			print("f : Facile | m : Moyen | d : Difficile")
 			print("q : quitter")

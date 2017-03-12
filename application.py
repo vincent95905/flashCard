@@ -39,7 +39,6 @@ class Application:
     def getNombrePaquet(self):
         return self.nombrePaquet
 
-    # A modifier
     def setNombrePaquet(self):
         self.nombrePaquet = len(self.getListePaquet())
 
@@ -111,7 +110,7 @@ class Application:
 
     def ajouterPaquetListePaquet(self, paquet):
         self.getListePaquet().append(paquet)
-        self.setNombrePaquet(self.getNombrePaquet() + 1)
+        self.setNombrePaquet()
         paquet.sauvegarde()
 
     # Recuperer Carte depuis interface et l'ajoute au paquetCourant

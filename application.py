@@ -121,8 +121,11 @@ class Application:
 
     def chargementPaquet(self, nomPaquetACharger):
         chemin = "paquets/" + nomPaquetACharger
-        with open(chemin, 'rb') as handle:
-            self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()] = pickle.load(handle)
+        try:
+            with open(chemin, 'rb') as handle:
+                self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()] = pickle.load(handle)
+        except FileNotFoundError:
+            print("{} n'existe pas".format(nomPaquetACharger))
         
     def viderPaquetCourant(self):
 

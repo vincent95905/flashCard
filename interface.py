@@ -45,6 +45,8 @@ class InterfaceConsole():
                     self.getApplication().startEntrainement()
                 elif(choix == 7):
                     continuer = 0
+                # elif(choix == 0):
+                #     self.getApplication().getNomTousLesPaquets()
             except ValueError:
                 print("Donne moi un nombre saloppe !")
             print("**************************")

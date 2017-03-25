@@ -6,6 +6,7 @@ from objets import *
 from interface import *
 from entrainement import *
 from constantes import *
+from guiTest import *
 
 #############################
 # Class Application
@@ -21,8 +22,9 @@ class Application:
         self.nombrePaquet = len(self.getListePaquet())
         # Retourne l'index du paquet sur lequel on travail
         self.indexPaquetCourantDansListePaquet = self.initPaquetCourant()
-        self.interface = InterfaceConsole(self)
-        #self.interface = InterfaceGrahique(self)
+        # self.interface = InterfaceConsole(self)
+        self.interface = ApplicationGraphique(self)
+        self.interface.mainloop()
 
     def getNom(self):
         return self.nom
@@ -53,6 +55,15 @@ class Application:
 
     def getPaquetCourant(self):
         return self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()]
+
+    # Renvoie le nom de tous les paquets dans une liste
+    def getNomTousLesPaquets(self):
+        liste = []
+
+        for paquet in self.getListePaquet():
+            liste.append(paquet.getNom())
+
+        return liste
 
     def chargerListePaquetSauvegarde(self):
         liste = []

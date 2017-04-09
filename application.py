@@ -24,6 +24,7 @@ class Application:
         self.indexPaquetCourantDansListePaquet = self.initPaquetCourant()
         # self.interface = InterfaceConsole(self)
         self.interface = ApplicationGraphique(self)
+
         self.interface.mainloop()
 
     def getNom(self):
@@ -56,6 +57,9 @@ class Application:
     def getPaquetCourant(self):
         return self.getListePaquet()[self.getIndexPaquetCourantDansListePaquet()]
 
+    def getNomPaquetCourant(self):
+        return self.getPaquetCourant().getNom()
+
     # Renvoie le nom de tous les paquets dans une liste
     def getNomTousLesPaquets(self):
         liste = []
@@ -64,6 +68,17 @@ class Application:
             liste.append(paquet.getNom())
 
         return liste
+
+    def getIdentifiantCartesPaquetCourant(self):
+        liste = []
+
+        for carte in self.getPaquetCourant():
+            liste.append(carte.getIdentifiant())
+
+        for carte in liste:
+            print(carte)
+        return liste
+
 
     def chargerListePaquetSauvegarde(self):
         liste = []
@@ -145,12 +160,25 @@ class Application:
         self.getPaquetCourant().setNombreCarte(0)
         self.getPaquetCourant().sauvegarde()
 
-    # C'est la qu'on va appeler la classe entrainement et on fou le bordel relatif a l'entrainement la bas
-    def startEntrainement(self):
-        entrainement = Entrainement(self.getPaquetCourant(), self)
-        entrainement.gestionEntrainement()
-        self.chargementPaquet(self.getPaquetCourant().getNom())
-        print("fin entrainement")
+    def setIndexPaquetCourantDepuisNomPaquet(self, nom):
+        i = 0
+        for paquet in self.getListePaquet():
+            if(paquet.getNom() == nom):
+                self.setIndexPaquetCourantDansListePaquet(i)
+            i += 1
+        print("paquet courant {}".format(self.getPaquetCourant().getNom()))
+
+    # # C'est la qu'on va appeler la classe entrainement et on fou le bordel relatif a l'entrainement la bas
+    # def creerEntrainement(self):
+    #     self.entrainement = Entrainement(self.getPaquetCourant(), self)
+    #     self.gestionEntrainement()
+        
+
+    # def gestionEntrainement(self):
+    #     carte = self.entrainement.tireAuSortCarte()
+
+    #     self.chargementPaquet(self.getPaquetCourant().getNom())
+    #     print("fin entrainement")
 
 def main():
     Application()

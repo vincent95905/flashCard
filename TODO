@@ -4,4 +4,36 @@ TO DO list :
 - Pouvoir revenir sur le paquet courant sur lequel on etait quand on avait quitte (il revient actuellement sur le premier paquet tout le temps) => Fait
 - Ajout de la fonctionnalite de difficulte de la carte (va avec le mode entrainement) : fait
 - Ajout de l'entrainement en version console
-- Faire l'interface graphique
+- Faire un export au format CSV
+
+----- Interface graphique ------
+
+- Gère la page principale => OK
+- Liste les différents paquets dans la page principale => OK
+- Création d'un paquet à partir d'une nouvelle fenetre => OK
+- Vérification des conditions de l'ajout du paquet (non existence au préalable) => OK
+- Changer le paquet courant depuis la page principale => OK
+
+Dimanche
+- Afficher le paquet courant dans le menu principal => OK
+- Création d'une carte dans une nouvelle fenetre => OK
+- Checker la validité de la création d'une carte => OK
+
+- Gestion du double clic pour changer le paquet courant => OK
+
+- Pouvoir s'entrainer sans aucune saisie
+- Pouvoir saisir la difficulte d'une carte
+- Pouvoir sauvegarder
+
+
+
+
+- Créer bandeau
+- Lister les cartes d'un paquet
+- Supprimer une carte
+
+
+
+
+
+BUG :

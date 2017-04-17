@@ -33,7 +33,8 @@ Dimanche
 - Supprimer une carte
 
 
-
+- UNE FOIS QUE L'ON QUITTE LA PAGE ENTRAINEMENT => self.chargementPaquet(self.getPaquetCourant().getNom())
 
 
 BUG :
+- Gere la creation d'un entrainement quand il n'y a pas de carte dans le paquet

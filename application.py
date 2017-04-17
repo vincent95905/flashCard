@@ -24,8 +24,13 @@ class Application:
         self.indexPaquetCourantDansListePaquet = self.initPaquetCourant()
         # self.interface = InterfaceConsole(self)
         self.interface = ApplicationGraphique(self)
-
         self.interface.mainloop()
+
+    def getEntrainement(self):
+        return self.entrainement
+
+    def setEntrainement(self, entrainement):
+        self.entrainement = entrainement
 
     def getNom(self):
         return self.nom
@@ -90,8 +95,10 @@ class Application:
             "liste fichier present dans le repertoire paquets/ : {}".format(listeFichiers))
 
         if(nombrePaquet == 0):
-            print("pas de sauvegarde, on va en cree une")
+            print("pas de paquet sauvegarde, on va en cree une")
             paquet = Paquet("paquetParDefaut", "paquets/")
+            carte = Carte("Default card", "")
+            paquet.ajoutCarte(carte)
             liste.append(paquet)
             paquet.sauvegarde()
         else:
@@ -170,8 +177,8 @@ class Application:
 
     # # C'est la qu'on va appeler la classe entrainement et on fou le bordel relatif a l'entrainement la bas
     # def creerEntrainement(self):
-    #     self.entrainement = Entrainement(self.getPaquetCourant(), self)
-    #     self.gestionEntrainement()
+    #     self.setEntrainement(Entrainement(self.getPaquetCourant(), self))
+    #     print("entrainement : {}".format(self.getEntrainement()))
         
 
     # def gestionEntrainement(self):

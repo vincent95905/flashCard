@@ -1,5 +1,6 @@
 import tkinter as tk
 from entrainement import *
+from constantes import *
 
 # Classe qui fait office de controler pour l'interface graphique
 # Lie la classe application avec l'interface graphique
@@ -55,7 +56,12 @@ class PagePrincipale(tk.Frame):
 
 		
 	def creationWidget(self):
-		self.listbox = tk.Listbox(self)
+
+		self.scrollbar = tk.Scrollbar(self)
+		self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
+		for i in range(1000):
+			self.listbox.insert(tk.END, str(i))
+
 
 		self.messageBienvenue = tk.Label(self, text="Bienvenue sur flashcard")
 		self.nomPaquetCourant = tk.Label(self, text=self.getApplication().getNomPaquetCourant())
@@ -68,12 +74,15 @@ class PagePrincipale(tk.Frame):
 
 	def dispositionWidget(self):
 		self.listbox.grid(row=2, column=0)
-		self.buttonEntrainement.grid(row=2, column=1)
+		self.scrollbar.grid(row=2, column=1, ipady=60)
+		self.buttonEntrainement.grid(row=2, column=2)
 		self.messageBienvenue.grid(row=0, column=0)
 		self.nomPaquetCourant.grid(row=1, column=0)
 		self.buttonAjoutPaquet.grid(row=3, column=0)
 		self.buttonTest.grid(row=4, column=0)
 		self.buttonAjoutCarte.grid(row=1, column=1)
+
+		self.scrollbar.config(command=self.listbox.yview)
 
 	def bindWidget(self):
 		self.listbox.bind("<Double-Button-1>", lambda var: self.getNomPaquetSelectionneDansListeBox())
@@ -163,7 +172,9 @@ class popupAjoutCarte(tk.Toplevel):
 			listeIdentifiant = self.getApplication().getIdentifiantCartesPaquetCourant()
 			if(identifiant not in listeIdentifiant):
 				self.getApplication().ajouterCartePaquetCourant(identifiant, valeur)
-
+				self.getApplication().chargementPaquet(self.getApplication().getPaquetCourant().getNom())
+			self.identifiantEntry.delete(0, tk.END)
+			self.valeurEntry.delete(0, tk.END)
 
 
 
@@ -205,6 +216,8 @@ class popupAjoutPaquet(tk.Toplevel):
 				self.infoAjoutPaquet['text'] = "Paquet enregistree"
 			else:
 				self.infoAjoutPaquet['text'] = "Le paquet existe deja"
+
+			self.saisieUtilisateur.delete(0, tk.END)
 		else:
 			self.infoAjoutPaquet['text'] = "paquet vide non autorise"
 
@@ -212,35 +225,55 @@ class popupAjoutPaquet(tk.Toplevel):
 class PageEntrainement(tk.Frame):
 
 	def __init__(self, container, controler):
-		tk.Frame.__init__(self, container)
-
+		self.frame = tk.Frame.__init__(self, container)
 		self.container = container
 		self.controler = controler
 
-		self.creationWidget()
-		self.dispositionWidget()		
+		self.entrainement = Entrainement(self.getApplication().getPaquetCourant(), self.getApplication())
 
-		# self.getApplication().creerEntrainement()
+		self.creationWidget()
+		self.dispositionWidget()
+		self.bindWidget()
+
 
 	def getApplication(self):
 		return self.controler.getApplication()
 
+	def getEntrainement(self):
+		return self.entrainement
+
 
 	def creationWidget(self):
-		self.titre = tk.Label(self, text="")
+		self.titre = tk.Label(self, text="yolo")
 		self.buttonMenuPrincipale = tk.Button(self, text="Menu Principal", command=lambda: self.controler.show_frame(PagePrincipale))
 		self.infoPaquet = tk.Label(self, text="")
-		
-		self.identifiant = tk.Label(self, text="identifiant")
+		self.identifiant = tk.Label(self, text=self.getEntrainement().getCarteTireAuSort().getIdentifiant())
 		self.valeur = tk.Label(self, text="valeur")
 
-		self.boutonFacile = tk.Button(self, text="Facile")
-		self.boutonMoyen = tk.Button(self, text="Moyen")
-		self.boutonDifficile = tk.Button(self, text="Difficile")
+		self.boutonAfficheReponse = tk.Button(self, text="Show answer", command=lambda: self.showAnswer())
+
+		self.boutonFacile = tk.Button(self, text="Facile", command=lambda: self.clicBoutonDifficulte(FACILE))
+		self.boutonMoyen = tk.Button(self, text="Moyen", command=lambda: self.clicBoutonDifficulte(MOYEN))
+		self.boutonDifficile = tk.Button(self, text="Difficile", command=lambda: self.clicBoutonDifficulte(DIFFICILE))
+
+
+
+	def showAnswer(self, event):
+		self.valeur.configure(text=self.getEntrainement().getCarteTireAuSort().getValeur())
+
+		event.widget.grid_forget()
+
+		self.boutonFacile.grid(row=6, column=0)
+		self.boutonMoyen.grid(row=6, column=1)
+		self.boutonDifficile.grid(row=6, column=3)
+
+	def bindWidget(self):
+	 	self.boutonAfficheReponse.bind("<Button-1>", lambda event: self.showAnswer(event))
 
 	def dispositionWidget(self):
 		self.titre.grid(row=0, column=2)
 		self.buttonMenuPrincipale.grid(row=2, column=1)
+		self.boutonAfficheReponse.grid(row=6, column=2)
 		self.infoPaquet.grid(row=1, column=0)
 		self.identifiant.grid(row=4, column=1)
 		self.valeur.grid(row=5, column=1)
@@ -248,14 +281,67 @@ class PageEntrainement(tk.Frame):
 		self.boutonMoyen.grid(row=6, column=1)
 		self.boutonDifficile.grid(row=6, column=3)
 
+		self.boutonFacile.grid_forget()
+		self.boutonMoyen.grid_forget()
+		self.boutonDifficile.grid_forget()
+
+	# Quand on clic sur le bouton facile, moyen ou difficile
+	def clicBoutonDifficulte(self, difficulte):
+		print("paquet avant le clic : {}".format(self.getApplication().getPaquetCourant().__str__()))
+		if(difficulte == FACILE):
+			self.getEntrainement().gestionEntrainement(FACILE)
+		elif(difficulte == MOYEN):
+			self.getEntrainement().gestionEntrainement(MOYEN)
+		elif(difficulte == DIFFICILE):
+			self.getEntrainement().gestionEntrainement(DIFFICILE)
+
+		self.identifiant.configure(text=self.getEntrainement().getCarteTireAuSort().getIdentifiant())
+		self.valeur.configure(text="")
+
+		self.boutonAfficheReponse.grid(row=6, column=2)
+		self.boutonFacile.grid_forget()
+		self.boutonMoyen.grid_forget()
+		self.boutonDifficile.grid_forget()
+
+
+		# self.getEntrainement().changeCarteTireAuSort()
+
+		print("paquet apres le clic : {}".format(self.getApplication().getPaquetCourant().__str__()))
+
+
+
+
 	# Fonction appele a chaque fois qu'on raise la page
 	# Permet de rafraichir les contenus, et tkWidget
 	def refreshPage(self):
 		# Refresh le titre du paquet courant
-		self.titre.configure(text=self.getApplication().getNomPaquetCourant())
+		print("refresh de la page entrainement")
 
-		# Refresh les informations du paquet courant
-		self.infoPaquet.configure(text=self.getApplication().getPaquetCourant().__str__())
+		# Si il y a des cartes dans le paquet entrainement
+		if(self.getApplication().getPaquetCourant().getNombreCarte() != 0):
+			self.entrainement = Entrainement(self.getApplication().getPaquetCourant(), self.getApplication())
+			self.titre.configure(text=self.getApplication().getNomPaquetCourant())
 
-# app = Application()
-# app.mainloop()
+
+			self.identifiant.configure(text=self.getEntrainement().getCarteTireAuSort().getIdentifiant())
+			self.valeur.configure(text="")
+			self.boutonFacile.grid_forget()
+			self.boutonMoyen.grid_forget()
+			self.boutonDifficile.grid_forget()
+			self.boutonAfficheReponse.grid(row=6, column=2)
+
+			# Refresh les informations du paquet courant
+			# self.infoPaquet.configure(text=self.getApplication().getPaquetCourant().__str__())
+		else:
+			self.gestionPaquetEntrainementVide()
+
+	def gestionPaquetEntrainementVide(self):
+
+		self.titre.configure(text=self.getApplication().getPaquetCourant().getNom())
+		self.identifiant.configure(text="")
+		self.valeur.configure(text="")
+		self.infoPaquet.configure(text="")
+		self.boutonFacile.grid_forget()
+		self.boutonMoyen.grid_forget()
+		self.boutonDifficile.grid_forget()
+		self.boutonAfficheReponse.grid_forget()

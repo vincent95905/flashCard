@@ -7,12 +7,13 @@ class Entrainement():
 
 	def __init__(self, paquet, application):
 		self.paquetEntrainement = paquet
+		self.application = application
+
 		self.listeCarteDifficulteFacile = self.triCarte()[1]
 		self.listeCarteDifficulteNonDefini = self.triCarte()[0]
 		self.listeCarteDifficulteMoyenne = self.triCarte()[2]
 		self.listeCarteDifficulteDifficile = self.triCarte()[3]
-
-		self.application = application
+		self.carteTireAuSort = self.tireAuSortCarte()
 
 	def getCarteTireAuSort(self):
 		return self.carteTireAuSort
@@ -64,6 +65,9 @@ class Entrainement():
 		s = "le paquet sur lequel on s'entraine est : "
 		s += self.getPaquetEntrainement().getNom()
 
+	def changeCarteTireAuSort(self):
+		self.carteTireAuSort = self.tireAuSortCarte()
+
 	# Tri les cartes en fonction de leur difficulte dans 4 listes
 	# Permet de faire le tri qu'une seule fois
 	def triCarte(self):
@@ -92,41 +96,51 @@ class Entrainement():
 			if(len(self.getListeNonDefini()) != 0):
 				carte =  self.getListeNonDefini()[0]
 				del self.listeCarteDifficulteNonDefini[0]
-				self.setCarteTireAuSort(carte) 
+				return carte
 
 			# 2 fois plus de chance de tomber sur une moyenne que facile
 			# 4 fois plus de chance de tomber sur une difficile que moyenne
 			else:
 				carteNonTrouve = 1
 				while(carteNonTrouve):
+					print("toto")
+					print("len liste facile : ", len(self.getListeFacile()))
+					print("len liste moyen : ", len(self.getListeMoyen()))
+					print("len liste difficile : ", len(self.getListeDifficile()))
 					nombreAleatoire = randrange(1, 22)
 					# print("nombre aleatoire : {}".format(nombreAleatoire))
 					if(nombreAleatoire <= 2 and len(self.getListeFacile()) != 0):
+						print("1")
 						# Tire dans la liste facile
 						indexCarteAleatoire = randrange(0, len(self.getListeFacile()))
 						carte = self.getListeFacile()[indexCarteAleatoire]
 						# carte.setDifficulte(FACILE)
 						del self.getListeFacile()[indexCarteAleatoire]
 						carteNonTrouve = 0
-						self.setCarteTireAuSort(carte) 
+						return carte 
 
 					elif(nombreAleatoire >= 3 and nombreAleatoire <= 6 and len(self.getListeMoyen()) != 0):
+						print("2")
 						# Tire dans la liste moyen
 						indexCarteAleatoire = randrange(0, len(self.getListeMoyen()))
 						carte = self.getListeMoyen()[indexCarteAleatoire]
 						# carte.setDifficulte(MOYEN)
 						del self.getListeMoyen()[indexCarteAleatoire]
 						carteNonTrouve = 0
-						self.setCarteTireAuSort(carte) 
+						return carte
 
-					elif(nombreAleatoire > 7 and len(self.getListeDifficile()) != 0):
+					elif(nombreAleatoire >= 7 and len(self.getListeDifficile()) != 0):
+						print("3")
 						# Tire dans la liste difficile
 						indexCarteAleatoire = randrange(0, len(self.getListeDifficile()))
 						carte = self.getListeDifficile()[indexCarteAleatoire]
 						# carte.setDifficulte(DIFFICILE)
 						del self.getListeDifficile()[indexCarteAleatoire]
 						carteNonTrouve = 0
-						self.setCarteTireAuSort(carte) 
+						return carte 
+					if(len(self.getListeFacile()) == 0 and len(self.getListeMoyen()) == 0 and len(self.getListeDifficile()) == 0):
+						print("liste de difficulte vide")
+						break
 		else:
 			print("Paquet d'entrainement vide")
 
@@ -164,7 +178,6 @@ class Entrainement():
 		# # self.afficheListe(self.getPaquetEntrainement())
 		# print(self.getPaquetEntrainement())
 		
-		# self.getApplication().sauvegarderPaquet(self.getPaquetEntrainement())
 		self.getPaquetEntrainement().sauvegarde()
 
 	def gestionEntrainement(self, entreeUtilisateur):
@@ -172,21 +185,22 @@ class Entrainement():
 		# Si il y au moins une carte dans le paquet d'entrainement
 		if(self.getPaquetEntrainement().getNombreCarte() > 0):
 
-
-			if(entreeUtilisateur == "f"):
+			if(entreeUtilisateur == FACILE):
 				self.getCarteTireAuSort().setDifficulte(FACILE)
 				self.getListeFacile().append(self.getCarteTireAuSort())
 				self.reformerPaquetAvecCartesTrieEtDifficulte()
-			elif(entreeUtilisateur == "m"):
+			elif(entreeUtilisateur == MOYEN):
 				self.getCarteTireAuSort().setDifficulte(MOYEN)
 				self.getListeMoyen().append(self.getCarteTireAuSort())
 				self.reformerPaquetAvecCartesTrieEtDifficulte()
-			elif(entreeUtilisateur == "d"):
+			elif(entreeUtilisateur == DIFFICILE):
 				self.getCarteTireAuSort().setDifficulte(DIFFICILE)
 				self.getListeDifficile().append(self.getCarteTireAuSort())
 				self.reformerPaquetAvecCartesTrieEtDifficulte()
 				# elif(choix == "a"):
 				#	print("nomber carte paquet entrainement : {}".format(self.getPaquetEntrainement().getNombreCarte()))
 
+			self.setCarteTireAuSort(self.tireAuSortCarte())
+			self.getApplication().chargementPaquet(self.getApplication().getPaquetCourant().getNom())
 		else:
 			print("Impossible de s'entrainer sur un paquet vide")
